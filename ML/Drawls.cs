@@ -1,6 +1,6 @@
 ﻿namespace ML.Entity
 {
-    public class DrawlsEntity
+    public class Drawls
     {
         public string Title { get; set; } = "";
         public string QuickContent { get; set; } = "";

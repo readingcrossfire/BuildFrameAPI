@@ -10,7 +10,7 @@ namespace EF
         {
             IConfigurationRoot configBuilder = new ConfigurationBuilder()
                   .SetBasePath(Directory.GetCurrentDirectory())
-                  .AddJsonFile("appsetting.json")
+                  .AddJsonFile("appsettings.json")
                   .Build();
             string connectionStrings = configBuilder.GetConnectionString("DB_BuildFrameAPI");
             DbContextOptionsBuilder<MyDbContext> builder = new DbContextOptionsBuilder<MyDbContext>()

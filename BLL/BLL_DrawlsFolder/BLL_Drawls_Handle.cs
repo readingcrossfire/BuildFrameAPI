@@ -10,7 +10,7 @@ namespace BLL
 {
     public partial class BLL_Drawls
     {
-        private async Task<APIListObjectResult<DrawlsEntity>> CrawlDataCodeMaze()
+        private async Task<APIListObjectResult<Drawls>> CrawlDataCodeMaze()
         {
             try
             {
@@ -19,7 +19,7 @@ namespace BLL
                 HtmlDocument htmlDocument = await htmlWeb.LoadFromWebAsync(urlBase);
                 HtmlNode rootList = htmlDocument.GetElementbyId("et-boc");
                 IEnumerable<HtmlNode> listPostNode = rootList.Descendants("article");
-                List<DrawlsEntity> listPost = new List<DrawlsEntity>();
+                List<Drawls> listPost = new List<Drawls>();
                 listPostNode.ToList().ForEach((post) =>
                 {
                     HtmlNode? titleNode = post.Descendants("h2").Where(x => x.Attributes["class"].Value == "entry-title").FirstOrDefault();
@@ -31,17 +31,17 @@ namespace BLL
                     string? time = timeNode?.InnerText;
                     HtmlNode? quickContentNode = post.Descendants("div").Where(x => x.Attributes["class"].Value == "post-content").FirstOrDefault();
                     string? quickContent = quickContentNode?.InnerText;
-                    listPost.Add(new DrawlsEntity { Title = title, PostUrl = url, PostDate = time, QuickContent = quickContent });
+                    listPost.Add(new Drawls { Title = title, PostUrl = url, PostDate = time, QuickContent = quickContent });
                 });
-                return new APIListObjectResult<DrawlsEntity> { IsError = false, Message = "Lấy thành công", ListObject = listPost };
+                return new APIListObjectResult<Drawls> { IsError = false, Message = "Lấy thành công", ListObject = listPost };
             }
             catch (Exception ex)
             {
-                return new APIListObjectResult<DrawlsEntity> { IsError = true, Message = ex.Message, ListObject = null };
+                return new APIListObjectResult<Drawls> { IsError = true, Message = ex.Message, ListObject = null };
             }
         }
 
-        public async Task<APIListObjectResult<DrawlsEntity>> CrawlDataCodeMaze(bool useCache = false)
+        public async Task<APIListObjectResult<Drawls>> CrawlDataCodeMaze(bool useCache = false)
         {
             try
             {
@@ -52,10 +52,10 @@ namespace BLL
                     byte[] cachedData = await this._cache.GetAsync(keyCache, cancel.Token);
                     if (cachedData != null)
                     {
-                        List<DrawlsEntity> lstDrawlsEntity = new();
+                        List<Drawls> lstDrawlsEntity = new();
                         var cachedDataString = Encoding.UTF8.GetString(cachedData);
-                        lstDrawlsEntity = JsonSerializer.Deserialize<List<DrawlsEntity>>(cachedDataString) ?? new();
-                        return new APIListObjectResult<DrawlsEntity>
+                        lstDrawlsEntity = JsonSerializer.Deserialize<List<Drawls>>(cachedDataString) ?? new();
+                        return new APIListObjectResult<Drawls>
                         {
                             IsError = false,
                             Message = "Lấy thành công",
@@ -66,7 +66,7 @@ namespace BLL
                     {
                         if (cancel.IsCancellationRequested)
                         {
-                            return new APIListObjectResult<DrawlsEntity>
+                            return new APIListObjectResult<Drawls>
                             {
                                 IsError = true,
                                 Message = "Có lỗi xảy ra"
@@ -75,7 +75,7 @@ namespace BLL
                         var result = await this.CrawlDataCodeMaze();
                         if (result.IsError)
                         {
-                            return new APIListObjectResult<DrawlsEntity>
+                            return new APIListObjectResult<Drawls>
                             {
                                 IsError = true,
                                 Message = "Có lỗi xảy ra"
@@ -99,7 +99,7 @@ namespace BLL
                     var result = await this.CrawlDataCodeMaze();
                     if (result.IsError)
                     {
-                        return new APIListObjectResult<DrawlsEntity>
+                        return new APIListObjectResult<Drawls>
                         {
                             IsError = true,
                             Message = "Có lỗi xảy ra"
@@ -119,7 +119,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                return new APIListObjectResult<DrawlsEntity>
+                return new APIListObjectResult<Drawls>
                 {
                     IsError = true,
                     Message = ex.Message

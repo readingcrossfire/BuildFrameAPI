@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Data;
+using System.Text.Json;
 using BLL;
 using CONNECTION;
 using CONNECTION.Interface;
@@ -20,16 +21,18 @@ namespace API.Controllers
             return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize<APIListObjectResult<Drawls>>(result));
         }
 
-        //[Route("/LoadData")]
-        //[HttpPost]
-        //[LogAttribute]
-        //public async Task<IActionResult> LoadData([FromQuery] bool useCache = false)
-        //{
-        //    //IDapperConnection dapperConnection = new DapperConnection();
-        //    //dapperConnection.CreateConnection();
-        //    //dapperConnection.OpenConnect();
-        //    //dapperConnection.CreateNewStoredProcedure("")
-
-        //}
+        [Route("/LoadData")]
+        [HttpPost]
+        [LogAttribute]
+        public async Task<IActionResult> LoadData([FromQuery] bool useCache = false)
+        {
+            IDapperConnection dapperConnection = new DapperConnection();
+            dapperConnection.CreateConnection();
+            dapperConnection.OpenConnect();
+            dapperConnection.CreateNewStoredProcedure("LOGS_GET_ALL");
+            var result = dapperConnection.Query();
+            dapperConnection.CloseConnect();
+            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize(result));
+        }
     }
 }

@@ -8,7 +8,7 @@ using ML.Entity;
 
 namespace BLL
 {
-    public partial class BLL_Drawls
+    public partial class BLL_Drawls: IDrawlsService
     {
         private async Task<APIListObjectResult<Drawls>> CrawlDataCodeMaze()
         {

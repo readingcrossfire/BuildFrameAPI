@@ -1,13 +1,13 @@
-﻿using BLL.BLL_DrawlsFolder.Interface;
+﻿using BLL.BLL_LOGS.Interface;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace BLL
+namespace BLL.BLL_LOGS
 {
-    public partial class BLL_Drawls
+    public class BLL_Logs_Ctor
     {
         protected readonly IDistributedCache _cache;
 
-        public BLL_Drawls(IDistributedCache cache)
+        public BLL_Logs_Ctor(IDistributedCache cache)
         {
             this._cache = cache;
         }

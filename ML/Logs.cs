@@ -6,5 +6,6 @@
         public string APINAME { get; set; }
         public string METHODNAME { get; set; }
         public string IP { get; set; }
+        public DateTime CREATEDDATE { get; set; }
     }
 }

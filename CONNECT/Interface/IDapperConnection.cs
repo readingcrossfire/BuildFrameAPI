@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-namespace CONNECTION.Interface
+﻿namespace CONNECTION.Interface
 {
     public interface IDapperConnection
     {
@@ -18,8 +16,10 @@ namespace CONNECTION.Interface
 
         public void AddParameter(string field, object value);
 
-        public int Execute();
+        public Task<int> ExecuteAsync();
 
-        public IEnumerable<dynamic> Query();
+        public Task<IEnumerable<T>> QueryAsync<T>();
+
+        public Task<IEnumerable<dynamic>> QueryAsync();
     }
 }

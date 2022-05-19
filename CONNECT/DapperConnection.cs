@@ -45,8 +45,10 @@ namespace CONNECTION
 
         public void CloseConnect() => _dbConnection.Close();
 
-        public int Execute() => _dbConnection.ExecuteAsync(this._storeName, this._dynamicParameters, commandType: CommandType.StoredProcedure).Result;
+        public async Task<int> ExecuteAsync() => await _dbConnection.ExecuteAsync(this._storeName, this._dynamicParameters, commandType: CommandType.StoredProcedure);
 
-        public IEnumerable<dynamic> Query() => _dbConnection.QueryAsync(_storeName, _dynamicParameters, commandType: CommandType.StoredProcedure).Result;
+        public async Task<IEnumerable<dynamic>> QueryAsync() => await _dbConnection.QueryAsync(_storeName, _dynamicParameters, commandType: CommandType.StoredProcedure);
+
+        public async Task<IEnumerable<T>> QueryAsync<T>() => await _dbConnection.QueryAsync<T>(_storeName, _dynamicParameters, commandType: CommandType.StoredProcedure);
     }
 }

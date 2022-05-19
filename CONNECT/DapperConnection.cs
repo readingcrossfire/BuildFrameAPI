@@ -1,41 +1,52 @@
 ﻿using System.Data;
 using System.Data.SqlClient;
+using CONNECTION.Interface;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 
 namespace CONNECTION
 {
-    public interface IData
+    public class DapperConnection : IDapperConnection
     {
-    }
+        private IDbConnection _dbConnection;
+        private String _storeName;
+        private DynamicParameters _dynamicParameters;
+        private IDbTransaction _dbTransaction;
 
-    public class DapperConnection
-    {
-        private static IDbConnection _dbConnection;
-        private static String _storeName;
-        private static DynamicParameters _dynamicParameters;
-
-        public static IDbConnection CreateConnection()
+        public IDapperConnection CreateConnection(string connectionString = "")
         {
             var builder = new ConfigurationBuilder()
                         .SetBasePath(Directory.GetCurrentDirectory())
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             var configuration = builder.Build();
-            _dbConnection = new SqlConnection(configuration.GetConnectionString("DB_BuildFrameAPI"));
-            return _dbConnection;
-        }
-        public static void CreateNewStoredProcedure(string nameStore)
-        {
-            _storeName = nameStore;
-            _dynamicParameters = new DynamicParameters();
-        }
-        public static void AddParameter(string fiedl, object value)
-        {
-            _dynamicParameters.Add(fiedl, value);
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                this._dbConnection = new SqlConnection(configuration.GetConnectionString(connectionString));
+            }
+            else
+            {
+                this._dbConnection = new SqlConnection(configuration.GetConnectionString("DB_BuildFrameAPI"));
+            }
+            return this;
         }
 
-        public static void OpenConnect() => _dbConnection.Open();
+        public void CreateNewStoredProcedure(string nameStore)
+        {
+            this._storeName = nameStore;
+            this._dynamicParameters = new DynamicParameters();
+        }
 
-        public static void CloseConnect() => _dbConnection.Close();
+        public void AddParameter(string field, object value)
+        {
+            _dynamicParameters.Add(field, value, DbType.String, ParameterDirection.Input);
+        }
+
+        public void OpenConnect() => _dbConnection.Open();
+
+        public void CloseConnect() => _dbConnection.Close();
+
+        public int Execute() => _dbConnection.ExecuteAsync(this._storeName, this._dynamicParameters, commandType: CommandType.StoredProcedure).Result;
+
+        public IEnumerable<dynamic> Query() => _dbConnection.QueryAsync(_storeName, _dynamicParameters, commandType: CommandType.StoredProcedure).Result;
     }
 }

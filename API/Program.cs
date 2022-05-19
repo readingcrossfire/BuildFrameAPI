@@ -13,7 +13,6 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
 
-//builder.Services.AddScoped<LogAttribute>();
 builder.Services.AddTransient<IDrawlsService, BLL_Drawls>();
 
 var app = builder.Build();

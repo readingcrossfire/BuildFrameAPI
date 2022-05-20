@@ -17,26 +17,26 @@ public class BLL_Infomation : IBLL_Infomation
     {
         _db = db;
     }
-    public APIResult_New GetListInfo()
+    public APIResult GetListInfo()
     {
 
         List<Infomation> lstInfomation = new List<Infomation>();
         ResultMessage objResultMessage = new ResultMessage();
         //DAL_Infomation dAL_Infomation = new DAL_Infomation();
         //DataTable dtInfomation = objDAL_CoordinatorGroup_Member.GetByCoordinatorGroupUserName(strMemberUserName, ref objResultMessage);
-        APIResult_New objAPIResult_New = new APIResult_New();
+        APIResult objAPIResult = new APIResult();
 
         lstInfomation = _db.GetInfoALLDatable(ref objResultMessage);
 
         if (objResultMessage.IsError)
-            return new APIResult_New(objResultMessage);
+            return new APIResult(objResultMessage);
         //foreach (DataRow objRow in dtCoordinatorGroup_MemberInfo.Rows)
         //{
         //    lstCoordinatorGroup_MemberList.Add(new CoordinatorGroup_Member(objRow));
         //}
-        objAPIResult_New.Message = "Lấy danh sách nhân viên thành công";
-        objAPIResult_New.ResultObject = lstInfomation;
-        return objAPIResult_New;
+        objAPIResult.Message = "Lấy danh sách nhân viên thành công";
+        objAPIResult.ResultObject = lstInfomation;
+        return objAPIResult;
 
     }
 

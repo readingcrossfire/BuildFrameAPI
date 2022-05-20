@@ -30,106 +30,55 @@ public class ResultMessage
         InvalidDeviceID
     }
 
-    private bool bolIsError = false;
-
-    private int intErrorType;
-
-    private string strMessage = string.Empty;
-
-    private string strMessageDetail = string.Empty;
-
-    public bool IsError
-    {
-        get
-        {
-            return bolIsError;
-        }
-        set
-        {
-            bolIsError = value;
-        }
-    }
-
-    public int ErrorType
-    {
-        get
-        {
-            return intErrorType;
-        }
-        set
-        {
-            intErrorType = value;
-        }
-    }
-
-    public string Message
-    {
-        get
-        {
-            return strMessage;
-        }
-        set
-        {
-            strMessage = value;
-        }
-    }
-
-    public string MessageDetail
-    {
-        get
-        {
-            return strMessageDetail;
-        }
-        set
-        {
-            strMessageDetail = value;
-        }
-    }
+    public bool IsError { get; set; } = false;
+    public int ErrorType { get; set; }
+    public string Message { get; set; }
+    public string MessageDetail { get; set; }
 
     public ResultMessage()
     {
-        bolIsError = false;
-        intErrorType = 0;
-        strMessage = "OK";
+        this.IsError = false;
+        this.ErrorType = 0;
+        this.Message = "OK";
     }
 
     public ResultMessage(bool bolIsError, ErrorTypes enErrorTypes, string strMessage, string strMessageDetail)
     {
-        this.bolIsError = bolIsError;
-        intErrorType = (int)enErrorTypes;
-        this.strMessage = strMessage;
-        this.strMessageDetail = strMessageDetail;
+        this.IsError = bolIsError;
+        this.ErrorType = (int)enErrorTypes;
+        this.Message = strMessage;
+        this.MessageDetail = strMessageDetail;
     }
 
     public ResultMessage(bool bolIsError, int intErrorType, string strMessage)
     {
-        this.bolIsError = bolIsError;
-        this.intErrorType = intErrorType;
-        this.strMessage = strMessage;
-        strMessageDetail = "";
+        this.IsError = bolIsError;
+        this.ErrorType = intErrorType;
+        this.Message = strMessage;
+        this.MessageDetail = "";
     }
 
     public ResultMessage(bool bolIsError, int intErrorType, string strMessage, string strMessageDetail)
     {
-        this.bolIsError = bolIsError;
-        this.intErrorType = intErrorType;
-        this.strMessage = strMessage;
-        this.strMessageDetail = strMessageDetail;
+        this.IsError = bolIsError;
+        this.ErrorType = intErrorType;
+        this.Message = strMessage;
+        this.MessageDetail = strMessageDetail;
     }
 
     public ResultMessage(bool bolIsError, ErrorTypes enErrorTypes, string strMessage)
     {
-        this.bolIsError = bolIsError;
-        intErrorType = (int)enErrorTypes;
-        this.strMessage = strMessage;
-        strMessageDetail = "";
+        this.IsError = bolIsError;
+        this.ErrorType = (int)enErrorTypes;
+        this.Message = strMessage;
+        this.MessageDetail = "";
     }
 
     public ResultMessage(APIResult objAPIResult)
-    {
-        bolIsError = objAPIResult.IsError;
-        intErrorType = objAPIResult.StatusID;
-        strMessage = objAPIResult.Message;
-        strMessageDetail = objAPIResult.MessageDetail;
+    { 
+        this.IsError = objAPIResult.IsError;
+        this.ErrorType = objAPIResult.StatusID;
+        this.Message = objAPIResult.Message;
+        this.MessageDetail = objAPIResult.MessageDetail;
     }
 }

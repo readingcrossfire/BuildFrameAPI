@@ -1,15 +1,18 @@
-﻿using BLL.BLL_LOGS.Interface;
+﻿using CONNECTION.Interface;
+using DAL.DAL_Logs;
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace BLL.BLL_LOGS
+namespace BLL.BLL_Logs
 {
-    public class BLL_Logs_Ctor
+    public partial class BLL_Logs
     {
         protected readonly IDistributedCache _cache;
+        protected readonly DAL_Logs _DAL_Logs;
 
-        public BLL_Logs_Ctor(IDistributedCache cache)
+        public BLL_Logs(IDistributedCache cache, DAL_Logs DAL_Logs)
         {
             this._cache = cache;
+            this._DAL_Logs = DAL_Logs;
         }
     }
 }

@@ -17,8 +17,7 @@ namespace SHARED.Atrributes
             dapperConnection.AddParameter("@APINAME", context.Controller.ToString());
             dapperConnection.AddParameter("@METHODNAME", context.ActionDescriptor.DisplayName.ToString().ToUpper());
             dapperConnection.AddParameter("@IP", context.HttpContext.Connection.RemoteIpAddress.ToString() ?? "");
-            dapperConnection.Execute();
-
+            int result = dapperConnection.ExecuteAsync().Result;
             await next();
         }
     }

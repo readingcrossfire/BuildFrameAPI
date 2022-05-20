@@ -1,6 +1,10 @@
 using BLL;
 using BLL.BLL_DrawlsFolder.Interface;
-using SHARED.Atrributes;
+using BLL.BLL_Logs;
+using BLL.BLL_Logs.Interface;
+using CONNECTION;
+using CONNECTION.Interface;
+using DAL.DAL_Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -13,7 +17,10 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
 
-builder.Services.AddTransient<IDrawlsService, BLL_Drawls>();
+builder.Services.AddScoped<IDrawlsService, BLL_Drawls>();
+builder.Services.AddScoped<ILogsService, BLL_Logs>();
+builder.Services.AddScoped<IDapperConnectionDI, DapperConnectionDI>();
+builder.Services.AddScoped<DAL_Logs>();
 
 var app = builder.Build();
 

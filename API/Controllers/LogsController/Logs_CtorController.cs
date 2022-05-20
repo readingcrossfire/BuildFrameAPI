@@ -1,13 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using BLL.BLL_Logs.Interface;
+using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.LogsController
 {
-    public class Logs_CtorController
+    [Route("api/[controller]")]
+    [ApiController]
+    public partial class LogsController: ControllerBase
     {
+        public readonly ILogsService _logsService;
 
+        public LogsController(ILogsService logsService)
+        {
+            this._logsService = logsService;
+        }
     }
 }

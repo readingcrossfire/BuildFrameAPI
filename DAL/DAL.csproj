@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CONNECT\CONNECTION.csproj" />
+    <ProjectReference Include="..\ML\ML.csproj" />
+  </ItemGroup>
+
 </Project>

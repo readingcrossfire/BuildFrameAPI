@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace ML;
 
-namespace ML;
 public class ResultMessage
 {
     public enum ErrorTypes
@@ -130,7 +125,7 @@ public class ResultMessage
         strMessageDetail = "";
     }
 
-    public ResultMessage(APIResult_New objAPIResult)
+    public ResultMessage(APIResult objAPIResult)
     {
         bolIsError = objAPIResult.IsError;
         intErrorType = objAPIResult.StatusID;

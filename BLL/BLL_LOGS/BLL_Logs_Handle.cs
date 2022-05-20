@@ -1,8 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
 using BLL.BLL_Logs.Interface;
-using DAL;
-using DAL.DAL_Logs;
 using Microsoft.Extensions.Caching.Distributed;
 using ML;
 using ML.APIResult;
@@ -82,7 +80,7 @@ namespace BLL.BLL_Logs
             if (useCache)
             {
                 CancellationTokenSource cancel = new CancellationTokenSource();
-                string keyCache = "CACHE_LOGS_GETALL";
+                string keyCache = "CACHE_LOGS_GETALLDI";
                 byte[] cachedData = await this._cache.GetAsync(keyCache, cancel.Token);
                 if (cachedData != null)
                 {
@@ -124,7 +122,7 @@ namespace BLL.BLL_Logs
             }
             else
             {
-                string keyCache = "CACHE_LOGS_GETALL";
+                string keyCache = "CACHE_LOGS_GETALLDI";
                 var result = await _DAL_Logs.LogsGetAllDI(); ;
                 string cachedDataString = JsonSerializer.Serialize(result);
                 var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);

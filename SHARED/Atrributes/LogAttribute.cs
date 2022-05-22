@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using CONNECTION;
-using CONNECTION.Interface;
+using CONNECTION.DapperConnection;
 using Dapper;
 using Microsoft.AspNetCore.Mvc.Filters;
 

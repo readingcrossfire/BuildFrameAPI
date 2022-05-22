@@ -1,7 +1,7 @@
-﻿using BLL.BLL_DrawlsFolder.Interface;
+﻿
 using Microsoft.Extensions.Caching.Distributed;
 
-namespace BLL
+namespace BLL.BLL_Drawls
 {
     public partial class BLL_Drawls
     {

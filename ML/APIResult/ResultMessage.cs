@@ -74,7 +74,7 @@ public class ResultMessage
         this.MessageDetail = "";
     }
 
-    public ResultMessage(APIResult objAPIResult)
+    public ResultMessage(APIResult<object> objAPIResult)
     { 
         this.IsError = objAPIResult.IsError;
         this.ErrorType = objAPIResult.StatusID;

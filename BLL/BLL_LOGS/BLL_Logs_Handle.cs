@@ -1,15 +1,13 @@
 ﻿using System.Text;
 using System.Text.Json;
-using BLL.BLL_Logs.Interface;
 using Microsoft.Extensions.Caching.Distributed;
 using ML;
-using ML.APIResult;
 
 namespace BLL.BLL_Logs
 {
     public partial class BLL_Logs : ILogsService
     {
-        public async Task<APIListObjectResult<Logs>> LogsGetAll(bool useCache = false)
+        public async Task<APIResult<List<Logs>>> LogsGetAll(bool useCache = false)
         {
             if (useCache)
             {
@@ -20,18 +18,18 @@ namespace BLL.BLL_Logs
                 {
                     var cachedDataString = Encoding.UTF8.GetString(cachedData);
                     List<Logs> lstLogsEntity = JsonSerializer.Deserialize<List<Logs>>(cachedDataString) ?? new();
-                    return new APIListObjectResult<Logs>
+                    return new APIResult<List<Logs>>
                     {
                         IsError = false,
                         Message = "Lấy thành công",
-                        ListObject = lstLogsEntity
+                        ResultObject = lstLogsEntity
                     };
                 }
                 else
                 {
                     if (cancel.IsCancellationRequested)
                     {
-                        return new APIListObjectResult<Logs>
+                        return new APIResult<List<Logs>>
                         {
                             IsError = true,
                             Message = "Có lỗi xảy ra"
@@ -46,11 +44,11 @@ namespace BLL.BLL_Logs
 
                     // Add the data into the cache
                     await _cache.SetAsync(keyCache, dataToCache, options);
-                    return new APIListObjectResult<Logs>
+                    return new APIResult<List<Logs>>
                     {
                         IsError = false,
                         Message = "Lấy thành công",
-                        ListObject = result.ToList()
+                        ResultObject = result.ToList()
                     };
                 }
             }
@@ -66,16 +64,16 @@ namespace BLL.BLL_Logs
 
                 // Add the data into the cache
                 await _cache.SetAsync(keyCache, dataToCache, options);
-                return new APIListObjectResult<Logs>
+                return new APIResult<List<Logs>>
                 {
                     IsError = false,
                     Message = "Lấy thành công",
-                    ListObject = result.ToList()
+                    ResultObject = result.ToList()
                 };
             }
         }
 
-        public async Task<APIListObjectResult<Logs>> LogsGetAllDI(bool useCache = false)
+        public async Task<APIResult<List<Logs>>> LogsGetAllDI(bool useCache = false)
         {
             if (useCache)
             {
@@ -86,18 +84,18 @@ namespace BLL.BLL_Logs
                 {
                     var cachedDataString = Encoding.UTF8.GetString(cachedData);
                     List<Logs> lstLogsEntity = JsonSerializer.Deserialize<List<Logs>>(cachedDataString) ?? new();
-                    return new APIListObjectResult<Logs>
+                    return new APIResult<List<Logs>>
                     {
                         IsError = false,
                         Message = "Lấy thành công",
-                        ListObject = lstLogsEntity
+                        ResultObject = lstLogsEntity
                     };
                 }
                 else
                 {
                     if (cancel.IsCancellationRequested)
                     {
-                        return new APIListObjectResult<Logs>
+                        return new APIResult<List<Logs>>
                         {
                             IsError = true,
                             Message = "Có lỗi xảy ra"
@@ -112,11 +110,11 @@ namespace BLL.BLL_Logs
 
                     // Add the data into the cache
                     await _cache.SetAsync(keyCache, dataToCache, options);
-                    return new APIListObjectResult<Logs>
+                    return new APIResult<List<Logs>>
                     {
                         IsError = false,
                         Message = "Lấy thành công",
-                        ListObject = result.ToList()
+                        ResultObject = result.ToList()
                     };
                 }
             }
@@ -132,11 +130,11 @@ namespace BLL.BLL_Logs
 
                 // Add the data into the cache
                 await _cache.SetAsync(keyCache, dataToCache, options);
-                return new APIListObjectResult<Logs>
+                return new APIResult<List<Logs>>
                 {
                     IsError = false,
                     Message = "Lấy thành công",
-                    ListObject = result.ToList()
+                    ResultObject = result.ToList()
                 };
             }
         }

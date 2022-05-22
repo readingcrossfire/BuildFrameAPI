@@ -1,9 +1,7 @@
 using BLL;
-using BLL.BLL_DrawlsFolder.Interface;
+using BLL.BLL_Drawls;
 using BLL.BLL_Logs;
-using BLL.BLL_Logs.Interface;
-using CONNECTION;
-using CONNECTION.Interface;
+using CONNECTION.DapperConnectionDI;
 using DAL.DAL_Logs;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,6 +19,7 @@ builder.Services.AddScoped<IDrawlsService, BLL_Drawls>();
 builder.Services.AddScoped<ILogsService, BLL_Logs>();
 builder.Services.AddScoped<IDapperConnectionDI, DapperConnectionDI>();
 builder.Services.AddScoped<DAL_Logs>();
+//builder.Services.AddScoped<DAL_Infomation>();
 
 var app = builder.Build();
 

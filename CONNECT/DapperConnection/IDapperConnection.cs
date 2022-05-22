@@ -1,8 +1,12 @@
-﻿namespace CONNECTION.Interface
+﻿namespace CONNECTION.DapperConnection
 {
-    public interface IDapperConnectionDI
+    public interface IDapperConnection
     {
-        public IDapperConnectionDI CreateConnection(string connectionString = "");
+        //public IDbConnection DbConnection { get; }
+        //public DynamicParameters DynamicParameters { get; }
+        //public IDbTransaction ITransaction { get; }
+
+        public IDapperConnection CreateConnection(string connectionString = "");
 
         public void OpenConnect();
 

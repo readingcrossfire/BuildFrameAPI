@@ -1,5 +1,5 @@
 ﻿using CONNECTION;
-using CONNECTION.Interface;
+using CONNECTION.DapperConnection;
 using ML;
 
 namespace DAL.DAL_Logs

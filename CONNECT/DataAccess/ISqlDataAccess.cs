@@ -1,5 +1,4 @@
-﻿
-namespace CONNECTION.Hieu_Dapper.DataAccess
+﻿namespace CONNECTION.DataAccess
 {
     public interface ISqlDataAccess
     {

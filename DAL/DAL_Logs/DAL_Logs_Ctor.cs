@@ -1,4 +1,4 @@
-﻿using CONNECTION.Interface;
+﻿using CONNECTION.DapperConnectionDI;
 
 namespace DAL.DAL_Logs
 {

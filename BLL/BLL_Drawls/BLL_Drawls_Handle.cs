@@ -1,16 +1,16 @@
 ﻿using System.Text;
 using System.Text.Json;
-using BLL.BLL_DrawlsFolder.Interface;
+using BLL.BLL_Drawls;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Caching.Distributed;
-using ML.APIResult;
+using ML;
 using ML.Entity;
 
-namespace BLL
+namespace BLL.BLL_Drawls
 {
     public partial class BLL_Drawls: IDrawlsService
     {
-        private async Task<APIListObjectResult<Drawls>> CrawlDataCodeMaze()
+        private async Task<APIResult<List<Drawls>>>CrawlDataCodeMaze()
         {
             try
             {
@@ -33,15 +33,15 @@ namespace BLL
                     string? quickContent = quickContentNode?.InnerText;
                     listPost.Add(new Drawls { Title = title, PostUrl = url, PostDate = time, QuickContent = quickContent });
                 });
-                return new APIListObjectResult<Drawls> { IsError = false, Message = "Lấy thành công", ListObject = listPost };
+                return new APIResult<List<Drawls>> { IsError = false, Message = "Lấy thành công", ResultObject = listPost };
             }
             catch (Exception ex)
             {
-                return new APIListObjectResult<Drawls> { IsError = true, Message = ex.Message, ListObject = null };
+                return new APIResult<List<Drawls>> { IsError = true, Message = ex.Message, ResultObject = null };
             }
         }
 
-        public async Task<APIListObjectResult<Drawls>> CrawlDataCodeMaze(bool useCache = false)
+        public async Task<APIResult<List<Drawls>>> CrawlDataCodeMaze(bool useCache = false)
         {
             try
             {
@@ -55,18 +55,18 @@ namespace BLL
                         List<Drawls> lstDrawlsEntity = new();
                         var cachedDataString = Encoding.UTF8.GetString(cachedData);
                         lstDrawlsEntity = JsonSerializer.Deserialize<List<Drawls>>(cachedDataString) ?? new();
-                        return new APIListObjectResult<Drawls>
+                        return new APIResult<List<Drawls>>
                         {
                             IsError = false,
                             Message = "Lấy thành công",
-                            ListObject = lstDrawlsEntity
+                            ResultObject = lstDrawlsEntity
                         };
                     }
                     else
                     {
                         if (cancel.IsCancellationRequested)
                         {
-                            return new APIListObjectResult<Drawls>
+                            return new APIResult<List<Drawls>>
                             {
                                 IsError = true,
                                 Message = "Có lỗi xảy ra"
@@ -75,14 +75,14 @@ namespace BLL
                         var result = await this.CrawlDataCodeMaze();
                         if (result.IsError)
                         {
-                            return new APIListObjectResult<Drawls>
+                            return new APIResult<List<Drawls>>
                             {
                                 IsError = true,
                                 Message = "Có lỗi xảy ra"
                             };
                         }
 
-                        string cachedDataString = JsonSerializer.Serialize(result.ListObject);
+                        string cachedDataString = JsonSerializer.Serialize(result.ResultObject);
                         var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
                         DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
                         .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
@@ -99,14 +99,14 @@ namespace BLL
                     var result = await this.CrawlDataCodeMaze();
                     if (result.IsError)
                     {
-                        return new APIListObjectResult<Drawls>
+                        return new APIResult<List<Drawls>>
                         {
                             IsError = true,
                             Message = "Có lỗi xảy ra"
                         };
                     }
 
-                    string cachedDataString = JsonSerializer.Serialize(result.ListObject);
+                    string cachedDataString = JsonSerializer.Serialize(result.ResultObject);
                     var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
                     DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
                     .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
@@ -119,7 +119,7 @@ namespace BLL
             }
             catch (Exception ex)
             {
-                return new APIListObjectResult<Drawls>
+                return new APIResult<List<Drawls>>
                 {
                     IsError = true,
                     Message = ex.Message

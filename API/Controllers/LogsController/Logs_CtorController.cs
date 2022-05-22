@@ -1,4 +1,5 @@
-﻿using BLL.BLL_Logs.Interface;
+﻿
+using BLL.BLL_Logs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.LogsController

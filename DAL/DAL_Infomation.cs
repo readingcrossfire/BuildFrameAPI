@@ -1,5 +1,5 @@
 ﻿
-using CONNECTION.Hieu_Dapper.DataAccess;
+using CONNECTION.DataAccess;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 using ML;
@@ -17,13 +17,10 @@ public class DAL_Infomation : IDAL_Infomation
     private readonly ISqlDataAccess _db;
     private readonly IConfiguration _config;
 
-
-
     public DAL_Infomation(ISqlDataAccess db, IConfiguration config)
     {
         _db = db;
         _config = config;
-
     }
 
     public Task<IEnumerable<Infomation>> GetInfoALL()

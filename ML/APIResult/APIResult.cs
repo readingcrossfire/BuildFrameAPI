@@ -2,13 +2,13 @@
 
 namespace ML;
 
-public class APIResult
+public class APIResult<T>
 {
     public bool IsError { get; set; }
     public int StatusID { get; set; }
     public string Message { get; set; }
     public string MessageDetail { get; set; }
-    public object ResultObject { get; set; }
+    public T ResultObject { get; set; }
 
     public APIResult()
     {
@@ -22,7 +22,7 @@ public class APIResult
         this.MessageDetail = objResultMessage.MessageDetail;
     }
 
-    public APIResult(int intStatusID, string strMessage, object objResultObject)
+    public APIResult(int intStatusID, string strMessage, T objResultObject)
     {
         this.StatusID = intStatusID;
         this.Message = strMessage;

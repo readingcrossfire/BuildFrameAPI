@@ -7,6 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DAL_Infomation.cs" />
+    <Compile Remove="IDAL_Infomation.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CONNECT\CONNECTION.csproj" />
     <ProjectReference Include="..\ML\ML.csproj" />
   </ItemGroup>

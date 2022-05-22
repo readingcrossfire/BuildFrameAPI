@@ -1,7 +1,6 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using ML;
-using ML.APIResult;
 using SHARED.Atrributes;
 
 namespace API.Controllers.LogsController
@@ -14,7 +13,7 @@ namespace API.Controllers.LogsController
         public async Task<IActionResult> GetAll([FromQuery] bool useCache = false)
         {
             var result = await this._logsService.LogsGetAll(useCache);
-            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize<APIListObjectResult<Logs>>(result));
+            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize<APIResult<List<Logs>>>(result));
         }
 
         [Route("/GetAllDI")]
@@ -23,7 +22,7 @@ namespace API.Controllers.LogsController
         public async Task<IActionResult> GetAllDI([FromQuery] bool useCache = false)
         {
             var result = await this._logsService.LogsGetAllDI(useCache);
-            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize<APIListObjectResult<Logs>>(result));
+            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize<APIResult<List<Logs>>>(result));
         }
     }
 }

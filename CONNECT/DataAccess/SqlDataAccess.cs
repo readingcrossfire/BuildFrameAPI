@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Dapper;
 using Microsoft.Extensions.Configuration;
 
-namespace CONNECTION.Hieu_Dapper.DataAccess
+namespace CONNECTION.DataAccess
 {
     public class SqlDataAccess : ISqlDataAccess
     {

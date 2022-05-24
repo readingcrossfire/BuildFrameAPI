@@ -16,9 +16,14 @@ namespace API.Controllers.Infomation
             _bll = bll;
         }
         [HttpGet, Route("GetInfomationLists")]
-        public APIResult_New GetInfomationList()
+        public APIResult<object> GetInfomationList()
         {
             return _bll.GetListInfo();
+        }
+        [HttpPost, Route("GetInfomationByID")]
+        public APIResult<object> GetInfomationList([FromBody] int intID)
+        {
+            return _bll.GetListInfoByID(intID);
         }
     }
 }

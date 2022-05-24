@@ -2,6 +2,7 @@
 using DAL.Data;
 using ML;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -11,31 +12,39 @@ using System.Threading.Tasks;
 namespace BLL;
 public class BLL_Infomation : IBLL_Infomation
 {
-    private readonly IDAL_Infomation _db;
 
-    public BLL_Infomation(IDAL_Infomation db)
-    {
-        _db = db;
-    }
-    public APIResult GetListInfo()
+    public APIResult<object> GetListInfo()
     {
 
         List<Infomation> lstInfomation = new List<Infomation>();
         ResultMessage objResultMessage = new ResultMessage();
-        //DAL_Infomation dAL_Infomation = new DAL_Infomation();
-        //DataTable dtInfomation = objDAL_CoordinatorGroup_Member.GetByCoordinatorGroupUserName(strMemberUserName, ref objResultMessage);
-        APIResult objAPIResult = new APIResult();
-
-        lstInfomation = _db.GetInfoALLDatable(ref objResultMessage);
+        DAL_Infomation objDAL_Infomation = new DAL_Infomation();
+        DataTable dtInfomation = objDAL_Infomation.GetInfoALL(ref objResultMessage);
+        APIResult<object> objAPIResult = new APIResult<object>();
 
         if (objResultMessage.IsError)
-            return new APIResult(objResultMessage);
-        //foreach (DataRow objRow in dtCoordinatorGroup_MemberInfo.Rows)
-        //{
-        //    lstCoordinatorGroup_MemberList.Add(new CoordinatorGroup_Member(objRow));
-        //}
+            return new APIResult<object>(objResultMessage);
+        foreach (DataRow objRow in dtInfomation.Rows)
+        {
+            lstInfomation.Add(new Infomation(objRow));
+        }
         objAPIResult.Message = "Lấy danh sách nhân viên thành công";
         objAPIResult.ResultObject = lstInfomation;
+        return objAPIResult;
+
+    }
+    public APIResult<object> GetListInfoByID(int intID)
+    {
+        Infomation objInfomation = new Infomation();
+        ResultMessage objResultMessage = new ResultMessage();
+        DAL_Infomation objDAL_Infomation = new DAL_Infomation();
+        APIResult<object> objAPIResult = new APIResult<object>();
+        objInfomation = objDAL_Infomation.GetInfoByID(intID, ref objResultMessage);
+        if (objResultMessage.IsError)
+            return new APIResult<object>(objResultMessage);
+
+        objAPIResult.Message = "Lấy danh sách nhân viên thành công";
+        objAPIResult.ResultObject = objInfomation;
         return objAPIResult;
 
     }

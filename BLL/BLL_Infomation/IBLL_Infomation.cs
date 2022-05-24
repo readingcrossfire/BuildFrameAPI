@@ -1,8 +1,10 @@
 ﻿using ML;
 
-namespace BLL;
-
-public interface IBLL_Infomation
+namespace BLL
 {
-    APIResult GetListInfo();
+    public interface IBLL_Infomation
+    {
+        APIResult<object> GetListInfo();
+        APIResult<object> GetListInfoByID(int intID);
+    }
 }

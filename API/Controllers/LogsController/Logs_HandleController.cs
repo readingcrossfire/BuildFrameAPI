@@ -15,14 +15,5 @@ namespace API.Controllers.LogsController
             var result = await this._logsService.LogsGetAll(useCache);
             return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize<APIResult<List<Logs>>>(result));
         }
-
-        [Route("/GetAllDI")]
-        [HttpPost]
-        [LogAttribute]
-        public async Task<IActionResult> GetAllDI([FromQuery] bool useCache = false)
-        {
-            var result = await this._logsService.LogsGetAllDI(useCache);
-            return StatusCode(StatusCodes.Status200OK, JsonSerializer.Serialize<APIResult<List<Logs>>>(result));
-        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using System.Linq;
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
@@ -59,7 +58,7 @@ namespace BLL.BLL_Logs
             {
                 string keyCache = "CACHE_LOGS_GETALL";
                 var result = await _DAL_Logs.LogsGetAllToDataTable();
-                var lstResult = result.Rows.OfType<DataRow>().Select(x=> new Logs(x)).ToList();
+                var lstResult = result.Rows.OfType<DataRow>().Select(x => new Logs(x)).ToList();
                 string cachedDataString = JsonSerializer.Serialize(lstResult);
                 var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
                 var options = new DistributedCacheEntryOptions()

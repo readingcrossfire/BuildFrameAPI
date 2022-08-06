@@ -5,11 +5,11 @@ namespace ML
 {
     public class Logs
     {
-        public string Id { get; set; }
-        public string ApiName { get; set; }
-        public string MethodName { get; set; }
-        public string Ip { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public string Id { get; set; } = "";
+        public string ApiName { get; set; } = "";
+        public string MethodName { get; set; } = "";
+        public string Description { get; set; } = "";
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
 
         public Logs(DataRow objDataRow)
@@ -29,9 +29,9 @@ namespace ML
                 this.MethodName = Convert.ToString(objDataRow["METHODNAME"]);
             }
 
-            if (!objDataRow.IsNullColumn("IP"))
+            if (!objDataRow.IsNullColumn("DESCRIPTION"))
             {
-                this.Ip = Convert.ToString(objDataRow["IP"]);
+                this.Description = Convert.ToString(objDataRow["DESCRIPTION"]);
             }
 
             if (!objDataRow.IsNullColumn("CREATEDDATE"))

@@ -8,6 +8,6 @@ namespace BLL.BLL_Authen
 {
     public interface IAuthenService
     {
-
+        
     }
 }

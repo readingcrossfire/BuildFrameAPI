@@ -7,17 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="BLL_Infomation\**" />
-    <EmbeddedResource Remove="BLL_Infomation\**" />
-    <None Remove="BLL_Infomation\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="BLL_Infomation\BLL_Infomation.cs" />
-    <Compile Include="BLL_Infomation\IBLL_Infomation.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.5" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.5" />

@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using SHARED.DbDataCheck;
 
 namespace ML
 {
@@ -14,30 +13,30 @@ namespace ML
 
         public Logs(DataRow objDataRow)
         {
-            if (!objDataRow.IsNullColumn("ID"))
-            {
-                this.Id = Convert.ToString(objDataRow["ID"]);
-            }
+            //if (!objDataRow.IsNullColumn("ID"))
+            //{
+            //    this.Id = Convert.ToString(objDataRow["ID"]);
+            //}
 
-            if (!objDataRow.IsNullColumn("APINAME"))
-            {
-                this.ApiName = Convert.ToString(objDataRow["APINAME"]);
-            }
+            //if (!objDataRow.IsNullColumn("APINAME"))
+            //{
+            //    this.ApiName = Convert.ToString(objDataRow["APINAME"]);
+            //}
 
-            if (!objDataRow.IsNullColumn("METHODNAME"))
-            {
-                this.MethodName = Convert.ToString(objDataRow["METHODNAME"]);
-            }
+            //if (!objDataRow.IsNullColumn("METHODNAME"))
+            //{
+            //    this.MethodName = Convert.ToString(objDataRow["METHODNAME"]);
+            //}
 
-            if (!objDataRow.IsNullColumn("DESCRIPTION"))
-            {
-                this.Description = Convert.ToString(objDataRow["DESCRIPTION"]);
-            }
+            //if (!objDataRow.IsNullColumn("DESCRIPTION"))
+            //{
+            //    this.Description = Convert.ToString(objDataRow["DESCRIPTION"]);
+            //}
 
-            if (!objDataRow.IsNullColumn("CREATEDDATE"))
-            {
-                this.CreatedDate = Convert.ToDateTime(objDataRow["CREATEDDATE"]);
-            }
+            //if (!objDataRow.IsNullColumn("CREATEDDATE"))
+            //{
+            //    this.CreatedDate = Convert.ToDateTime(objDataRow["CREATEDDATE"]);
+            //}
         }
     }
 }

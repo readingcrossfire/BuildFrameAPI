@@ -10,10 +10,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="SHARED">
-      <HintPath>..\SHARED\bin\Debug\net6.0\SHARED.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>

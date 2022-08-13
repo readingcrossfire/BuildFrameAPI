@@ -4,8 +4,7 @@ using BLL;
 using CONNECTION;
 using Microsoft.AspNetCore.Mvc;
 using ML;
-using ML.APIResult;
-using ML.Drawls;
+using ML.Entity;
 using SHARED.Atrributes;
 
 namespace API.Controllers
@@ -14,7 +13,7 @@ namespace API.Controllers
     {
         [Route("/CrawlDataCodeMaze")]
         [HttpPost]
-        //[LogAttribute]
+        [LogAttribute]
         public async Task<IActionResult> CrawlDataCodeMaze([FromQuery] bool useCache = false)
         {
             var result = await this._drawlsService.CrawlDataCodeMaze(useCache);

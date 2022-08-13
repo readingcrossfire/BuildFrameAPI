@@ -1,4 +1,4 @@
-﻿namespace ML.Drawls
+﻿namespace ML.Entity
 {
     public class Drawls
     {

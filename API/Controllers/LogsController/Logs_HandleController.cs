@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using ML;
+using ML.APIResult;
 using SHARED.Atrributes;
 
 namespace API.Controllers.LogsController

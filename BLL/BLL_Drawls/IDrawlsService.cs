@@ -1,5 +1,6 @@
 ﻿using ML;
-using ML.Entity;
+using ML.APIResult;
+using ML.Drawls;
 
 namespace BLL.BLL_Drawls
 {

@@ -1,6 +1,6 @@
 ﻿using System.Data;
 using CONNECTION.DapperConnection;
-using ML;
+using ML.Logs;
 
 namespace DAL.DAL_Logs
 {

@@ -4,6 +4,7 @@ using BLL.BLL_Drawls;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Caching.Distributed;
 using ML;
+using ML.APIResult;
 using ML.Entity;
 
 namespace BLL.BLL_Drawls

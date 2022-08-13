@@ -1,7 +1,5 @@
 using BLL;
 using BLL.BLL_Drawls;
-using BLL.BLL_Logs;
-using DAL.DAL_Logs;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
@@ -12,13 +10,16 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisCacheUrl"]; });
+builder.Services.AddStackExchangeRedisCache(options => {
+    var configOptions = new StackExchange.Redis.ConfigurationOptions();
+    string strHost = configuration.GetValue<string>("Host");
+    int intPort = configuration.GetValue<int>("Port");
+    configOptions.EndPoints.Add(strHost, intPort);
+    configOptions.Password = configuration.GetValue<string>("Password");
+    options.ConfigurationOptions = configOptions;
+});
 
 builder.Services.AddScoped<IDrawlsService, BLL_Drawls>();
-builder.Services.AddScoped<ILogsService, BLL_Logs>();
-builder.Services.AddScoped<DAL_Logs>();
-builder.Services.AddScoped<IBLL_Infomation,BLL_Infomation>();
-//builder.Services.AddScoped<DAL_Infomation>();
 
 var app = builder.Build();
 

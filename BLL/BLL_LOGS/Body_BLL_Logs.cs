@@ -2,8 +2,8 @@
 using System.Text;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
-using ML;
 using ML.APIResult;
+using ML.Logs;
 
 namespace BLL.BLL_Logs
 {
@@ -37,9 +37,8 @@ namespace BLL.BLL_Logs
                             Message = "Có lỗi xảy ra"
                         };
                     }
-                    var result = await _DAL_Logs.LogsGetAllToDataTable();
-                    var lstResult = result.Rows.OfType<DataRow>().Select(x => new Logs(x)).ToList();
-                    string cachedDataString = JsonSerializer.Serialize(lstResult);
+                    List<Logs> lstLogs = await _dal_Logs.LogsGetAll() as List<Logs>;
+                    string cachedDataString = JsonSerializer.Serialize(lstLogs);
                     var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
                     var options = new DistributedCacheEntryOptions()
                     .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
@@ -51,16 +50,15 @@ namespace BLL.BLL_Logs
                     {
                         IsError = false,
                         Message = "Lấy thành công",
-                        ResultObject = lstResult
+                        ResultObject = lstLogs.ToList()
                     };
                 }
             }
             else
             {
                 string keyCache = "CACHE_LOGS_GETALL";
-                var result = await _DAL_Logs.LogsGetAllToDataTable();
-                var lstResult = result.Rows.OfType<DataRow>().Select(x => new Logs(x)).ToList();
-                string cachedDataString = JsonSerializer.Serialize(lstResult);
+                List<Logs> lstLogs = await _dal_Logs.LogsGetAll() as List<Logs>;
+                string cachedDataString = JsonSerializer.Serialize(lstLogs);
                 var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
                 var options = new DistributedCacheEntryOptions()
                 .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
@@ -72,7 +70,7 @@ namespace BLL.BLL_Logs
                 {
                     IsError = false,
                     Message = "Lấy thành công",
-                    ResultObject = lstResult
+                    ResultObject = lstLogs
                 };
             }
         }

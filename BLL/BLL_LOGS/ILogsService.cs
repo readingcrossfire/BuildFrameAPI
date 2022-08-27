@@ -1,5 +1,5 @@
-﻿using ML;
-using ML.APIResult;
+﻿using ML.APIResult;
+using ML.Logs;
 
 namespace BLL.BLL_Logs
 {

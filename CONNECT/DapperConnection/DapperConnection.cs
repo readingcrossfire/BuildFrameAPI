@@ -7,7 +7,7 @@ namespace CONNECTION.DapperConnection
 {
     public class DapperConnection : IDapperConnection
     {
-        private IDbConnection? _dbConnection;
+        private IDbConnection _dbConnection;
         private string? _storeName;
         private DynamicParameters? _dynamicParameters;
         private IDbTransaction? _dbTransaction;
@@ -21,11 +21,11 @@ namespace CONNECTION.DapperConnection
             var configuration = builder.Build();
             if (!string.IsNullOrEmpty(connectionString))
             {
-                dbConnection = new SqlConnection(configuration.GetConnectionString(connectionString));
+                dbConnection = new SqlConnection(connectionString);
             }
             else
             {
-                dbConnection = new SqlConnection(configuration.GetConnectionString("DB_BuildFrameAPI"));
+                dbConnection = new SqlConnection(configuration.GetConnectionString("DB_NEWSAPI"));
             }
             return new DapperConnection()
             {
@@ -45,9 +45,9 @@ namespace CONNECTION.DapperConnection
             _dynamicParameters.Add(field, value, DbType.String, ParameterDirection.Input);
         }
 
-        public void OpenConnect() => _dbConnection?.Open();
+        public void OpenConnect() => _dbConnection.Open();
 
-        public void CloseConnect() => _dbConnection?.Close();
+        public void CloseConnect() => _dbConnection.Close();
 
         public async Task<int> ExecuteAsync() => await _dbConnection.ExecuteAsync(_storeName, _dynamicParameters, commandType: CommandType.StoredProcedure);
 

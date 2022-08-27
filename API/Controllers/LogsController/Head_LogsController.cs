@@ -1,12 +1,11 @@
-﻿
-using BLL.BLL_Logs;
+﻿using BLL.BLL_Logs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers.LogsController
 {
-    [Route("api/[controller]")]
+    [Route("API/Logs")]
     [ApiController]
-    public partial class LogsController: ControllerBase
+    public partial class LogsController : ControllerBase
     {
         public readonly ILogsService _logsService;
 

@@ -1,17 +1,14 @@
-﻿using System.Text.Json;
-using BLL;
-using BLL.BLL_Drawls;
+﻿using BLL.BLL_Drawls;
 using Microsoft.AspNetCore.Mvc;
-using ML.Entity;
-using SHARED.Atrributes;
 
-namespace API.Controllers
+namespace API.Controllers.DrawlsController
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("API/Drawls")]
     public partial class DrawlsController : ControllerBase
     {
         private readonly IDrawlsService _drawlsService;
+
         public DrawlsController(IDrawlsService drawlsService)
         {
             this._drawlsService = drawlsService;

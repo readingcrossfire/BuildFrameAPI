@@ -4,9 +4,9 @@ using ML.MenuTypes;
 
 namespace ENTITYFRAMEWORK.Configuration
 {
-    public class MenuTypesConfiguration : IEntityTypeConfiguration<MenuTypes>
+    public class MenuTypesConfiguration : IEntityTypeConfiguration<MenuTypesItem>
     {
-        public void Configure(EntityTypeBuilder<MenuTypes> builder)
+        public void Configure(EntityTypeBuilder<MenuTypesItem> builder)
         {
             builder.ToTable("MENUTYPES");
             builder.HasKey(x => x.Id);

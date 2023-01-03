@@ -1,15 +1,26 @@
 ﻿using System.Data;
 using System.Text;
 using System.Text.Json;
+using DAL.DAL_Logs;
 using Microsoft.Extensions.Caching.Distributed;
 using ML.APIResult;
 using ML.Logs;
 
 namespace BLL.BLL_Logs
 {
-    public partial class BLL_Logs : ILogsService
+    public class BLL_Logs : ILogsService
     {
-        public async Task<APIResult<List<Logs>>> LogsGetAll(bool useCache = false)
+        protected readonly IDistributedCache _cache;
+        protected readonly DAL_Logs _dal_Logs;
+
+        public BLL_Logs(IDistributedCache cache, DAL_Logs dal_Logs)
+        {
+            this._cache = cache;
+            this._dal_Logs = dal_Logs
+;
+        }
+
+        public async Task<APIResult<List<LogsItem>>> LogsGetAll(bool useCache = false)
         {
             if (useCache)
             {
@@ -19,8 +30,8 @@ namespace BLL.BLL_Logs
                 if (cachedData != null)
                 {
                     var cachedDataString = Encoding.UTF8.GetString(cachedData);
-                    List<Logs> lstLogsEntity = JsonSerializer.Deserialize<List<Logs>>(cachedDataString) ?? new();
-                    return new APIResult<List<Logs>>
+                    List<LogsItem> lstLogsEntity = JsonSerializer.Deserialize<List<LogsItem>>(cachedDataString) ?? new();
+                    return new APIResult<List<LogsItem>>
                     {
                         IsError = false,
                         Message = "Lấy thành công",
@@ -31,13 +42,14 @@ namespace BLL.BLL_Logs
                 {
                     if (cancel.IsCancellationRequested)
                     {
-                        return new APIResult<List<Logs>>
+                        return new APIResult<List<LogsItem>>
                         {
                             IsError = true,
                             Message = "Có lỗi xảy ra"
                         };
                     }
-                    List<Logs> lstLogs = await _dal_Logs.LogsGetAll() as List<Logs>;
+                    
+                    List<LogsItem> lstLogs = await _dal_Logs.LogsGetAll() as List<LogsItem>;
                     string cachedDataString = JsonSerializer.Serialize(lstLogs);
                     var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
                     var options = new DistributedCacheEntryOptions()
@@ -46,7 +58,7 @@ namespace BLL.BLL_Logs
 
                     // Add the data into the cache
                     await _cache.SetAsync(keyCache, dataToCache, options);
-                    return new APIResult<List<Logs>>
+                    return new APIResult<List<LogsItem>>
                     {
                         IsError = false,
                         Message = "Lấy thành công",
@@ -57,7 +69,7 @@ namespace BLL.BLL_Logs
             else
             {
                 string keyCache = "CACHE_LOGS_GETALL";
-                List<Logs> lstLogs = await _dal_Logs.LogsGetAll() as List<Logs>;
+                List<LogsItem> lstLogs = await _dal_Logs.LogsGetAll() as List<LogsItem>;
                 string cachedDataString = JsonSerializer.Serialize(lstLogs);
                 var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
                 var options = new DistributedCacheEntryOptions()
@@ -66,7 +78,7 @@ namespace BLL.BLL_Logs
 
                 // Add the data into the cache
                 await _cache.SetAsync(keyCache, dataToCache, options);
-                return new APIResult<List<Logs>>
+                return new APIResult<List<LogsItem>>
                 {
                     IsError = false,
                     Message = "Lấy thành công",

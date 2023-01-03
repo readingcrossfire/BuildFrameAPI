@@ -4,9 +4,9 @@ using ML.MenuTypes;
 
 namespace DAL.DAL_MenuTypes
 {
-    public partial class DAL_MenuTypes
+    public class DAL_MenuTypes
     {
-        public async Task<IEnumerable<MenuTypes>> MenuTypesGetAll()
+        public async Task<IEnumerable<MenuTypesItem>> MenuTypesGetAll()
         {
             IDapperConnection dapperConnection = DapperConnection.CreateConnection();
 
@@ -14,7 +14,7 @@ namespace DAL.DAL_MenuTypes
             {
                 dapperConnection.OpenConnect();
                 dapperConnection.CreateNewStoredProcedure("MENUTYPES_GETALL");
-                var result = await dapperConnection.QueryAsync<MenuTypes>();
+                var result = await dapperConnection.QueryAsync<MenuTypesItem>();
                 return result;
             }
             finally

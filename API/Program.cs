@@ -1,9 +1,12 @@
 using BLL.BLL_Drawls;
 using BLL.BLL_Logs;
 using BLL.BLL_MenuTypes;
+using CACHE;
 using DAL.DAL_Logs;
 using DAL.DAL_MenuTypes;
 using EntityFramework;
+using FIREBASE.SendNotification;
+using FIREBASE.SendNotification.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ML.Entities;
@@ -23,21 +26,24 @@ builder.Services
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    var configOptions = new StackExchange.Redis.ConfigurationOptions();
-    string strHost = configuration.GetValue<string>("Host");
-    int intPort = configuration.GetValue<int>("Port");
-    configOptions.EndPoints.Add(strHost, intPort);
-    configOptions.Password = configuration.GetValue<string>("Password");
-    options.ConfigurationOptions = configOptions;
-});
+
+//builder.Services.AddStackExchangeRedisCache(options =>
+//{
+//    var configOptions = new StackExchange.Redis.ConfigurationOptions();
+//    string strHost = configuration.GetValue<string>("Redis:Host");
+//    int intPort = configuration.GetValue<int>("Redis:Port");
+//    configOptions.EndPoints.Add(strHost, intPort);
+//    configOptions.Password = configuration.GetValue<string>("Redis:Password");
+//    configOptions.DefaultDatabase = Convert.ToInt32(configuration.GetValue<string>("Redis:RedisDB"));
+//    options.ConfigurationOptions = configOptions;
+//});
 
 builder.Services.AddScoped<IDrawlsService, BLL_Drawls>();
-builder.Services.AddScoped<ILogsService, BLL_Logs>();
-builder.Services.AddScoped<IMenuTypesService, BLL_MenuTypes>();
-builder.Services.AddScoped<DAL_Logs>();
-builder.Services.AddScoped<DAL_MenuTypes>();
+//builder.Services.AddScoped<ISendNotification, SendNotification>();
+//builder.Services.AddScoped<ILogsService, BLL_Logs>();
+//builder.Services.AddScoped<IMenuTypesService, BLL_MenuTypes>();
+//builder.Services.AddScoped<DAL_Logs>();
+//builder.Services.AddScoped<DAL_MenuTypes>();
 
 var app = builder.Build();
 

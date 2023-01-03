@@ -5,6 +5,6 @@ namespace BLL.BLL_MenuTypes
 {
     public interface IMenuTypesService
     {
-        public Task<APIResult<List<MenuTypes>>> GetAll(bool useCache = false);
+        public Task<APIResult<List<MenuTypesItem>>> GetAll(bool useCache = false);
     }
 }

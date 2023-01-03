@@ -11,7 +11,7 @@ namespace EntityFramework
     public class NewsAppDbContext : IdentityDbContext<NewsAppUser, NewsAppRole, Guid>
     {
         public DbSet<Logs> LogsEntity { get; set; }
-        public DbSet<MenuTypes> MenuTypeEntity { get; set; }
+        public DbSet<MenuTypesItem> MenuTypeEntity { get; set; }
 
         public NewsAppDbContext(DbContextOptions<NewsAppDbContext> options) : base(options)
         {

@@ -4,9 +4,9 @@ using ML.Logs;
 
 namespace DAL.DAL_Logs
 {
-    public partial class DAL_Logs
+    public class DAL_Logs
     {
-        public async Task<IEnumerable<Logs>> LogsGetAll()
+        public async Task<IEnumerable<LogsItem>> LogsGetAll()
         {
             IDapperConnection dapperConnection = DapperConnection.CreateConnection();
 
@@ -14,7 +14,7 @@ namespace DAL.DAL_Logs
             {
                 dapperConnection.OpenConnect();
                 dapperConnection.CreateNewStoredProcedure("LOGS_GETALL");
-                var result = await dapperConnection.QueryAsync<Logs>();
+                var result = await dapperConnection.QueryAsync<LogsItem>();
                 return result;
             }
             finally

@@ -17,13 +17,15 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="6.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="7.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BLL\BLL.csproj" />
+    <ProjectReference Include="..\CACHE\CACHE.csproj" />
     <ProjectReference Include="..\EntityFramework\ENTITYFRAMEWORK.csproj" />
+    <ProjectReference Include="..\FIREBASE\FIREBASE.csproj" />
     <ProjectReference Include="..\SHARED\SHARED.csproj" />
   </ItemGroup>
 

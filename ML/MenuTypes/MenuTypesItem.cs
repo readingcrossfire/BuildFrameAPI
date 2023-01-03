@@ -1,6 +1,6 @@
 ﻿namespace ML.MenuTypes
 {
-    public class MenuTypes
+    public class MenuTypesItem
     {
         public string Id { get; set; }
         public string Key { get; set; }

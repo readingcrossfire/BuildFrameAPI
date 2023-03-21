@@ -1,10 +1,5 @@
-﻿using System.Text;
-using System.Text.Json;
-using CACHE;
-using FIREBASE.SendNotification;
-using FIREBASE.SendNotification.Interface;
+﻿using CACHE;
 using HtmlAgilityPack;
-using Microsoft.Extensions.Caching.Distributed;
 using ML.APIResult;
 using ML.Drawls;
 using ML.Paging;
@@ -13,16 +8,10 @@ namespace BLL.BLL_Drawls
 {
     public class BLL_Drawls : IDrawlsService
     {
-        //private readonly ISendNotification _sendNotification;
-        //public BLL_Drawls(ISendNotification sendNotification)
-        //{
-        //    this._sendNotification = sendNotification;
-        //}
         private async Task<APIResult<List<DrawlsItem>>> CrawlDataCodeMaze()
         {
             try
             {
-                //await _sendNotification.Send("BG9l327lk8pl_OmxAwSQkmBhJNnU3WadtjQZJedAmbopKFV3kqeLBCfcNv1rv-pTaonG0K7OQ4YFnQfLy6XGxWU", "TestData", "OK");
                 string urlBase = @"https://code-maze.com/latest-posts-on-code-maze/";
                 HtmlWeb htmlWeb = new HtmlWeb();
                 HtmlDocument htmlDocument = await htmlWeb.LoadFromWebAsync(urlBase);
@@ -107,23 +96,12 @@ namespace BLL.BLL_Drawls
         {
             try
             {
-
                 if (useCache)
                 {
-                    string keyCache = "CACHE_CRAWLDATACODEMAZE";
-
-                    MessageResultBase objCacheResult = await Cache.Instance.Get<byte[]>(keyCache);
-                    byte[] arrBeCachedData = null;
-                    if (!objCacheResult.IsError)
+                    MessageResult<List<DrawlsItem>> objDataCacheResult = await Cache.Instance.Get<List<DrawlsItem>>(KeysCache.CACHE_CRAWLDATACODEMAZE);
+                    if (objDataCacheResult != null && !objDataCacheResult.IsError && objDataCacheResult.ResultObject != null && objDataCacheResult.ResultObject.Count > 0)
                     {
-                        arrBeCachedData = (objCacheResult as MessageResult<byte[]>).ResultObject;
-                    }
-
-                    if (arrBeCachedData != null)
-                    {
-                        List<DrawlsItem> lstDrawlsEntity = new();
-                        var cachedDataString = Encoding.UTF8.GetString(arrBeCachedData);
-                        lstDrawlsEntity = JsonSerializer.Deserialize<List<DrawlsItem>>(cachedDataString) ?? new();
+                        List<DrawlsItem> lstDrawlsEntity = objDataCacheResult.ResultObject;
                         int intTotalCount = lstDrawlsEntity.Count();
                         if (paging.PageSize == -1)
                         {
@@ -137,6 +115,7 @@ namespace BLL.BLL_Drawls
                                 };
                                 return x;
                             }).ToList();
+
                             return new APIResult<List<DrawlsItem>>
                             {
                                 IsError = false,
@@ -165,10 +144,10 @@ namespace BLL.BLL_Drawls
                     }
                     else
                     {
-                        var result = await this.CrawlDataCodeMaze();
-                        int intTotalCount = result.ResultObject.Count();
+                        APIResult<List<DrawlsItem>> objAPIResult = await this.CrawlDataCodeMaze();
+                        int intTotalCount = objAPIResult.ResultObject.Count();
 
-                        if (result.IsError)
+                        if (objAPIResult.IsError)
                         {
                             return new APIResult<List<DrawlsItem>>
                             {
@@ -177,16 +156,12 @@ namespace BLL.BLL_Drawls
                             };
                         }
 
-                        string cachedDataString = JsonSerializer.Serialize(result.ResultObject);
-                        var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
-                        DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
-                        .SetSlidingExpiration(TimeSpan.FromMinutes(3));
                         // Add the data into the cache
-                        await Cache.Instance.Set(keyCache, dataToCache, DateTimeOffset.Now.AddHours(1));
+                        Cache.Instance.Set("CACHE_CRAWLDATACODEMAZE", objAPIResult.ResultObject, DateTimeOffset.Now.AddHours(1));
+
                         if (paging.PageSize == -1)
                         {
-                            result.ResultObject = result.ResultObject.Select(x =>
+                            objAPIResult.ResultObject = objAPIResult.ResultObject.Select(x =>
                             {
                                 x.Paging = new PagingItem
                                 {
@@ -196,10 +171,10 @@ namespace BLL.BLL_Drawls
                                 };
                                 return x;
                             }).ToList();
-                            return result;
+                            return objAPIResult;
                         }
 
-                        result.ResultObject = result.ResultObject.Select(x =>
+                        objAPIResult.ResultObject = objAPIResult.ResultObject.Select(x =>
                         {
                             x.Paging = new PagingItem
                             {
@@ -209,16 +184,16 @@ namespace BLL.BLL_Drawls
                             };
                             return x;
                         }).ToList();
-                        result.ResultObject = result.ResultObject.Skip((paging.PageIndex - 1) * paging.PageSize).Take(paging.PageSize).ToList();
-                        return result;
+
+                        objAPIResult.ResultObject = objAPIResult.ResultObject.Skip((paging.PageIndex - 1) * paging.PageSize).Take(paging.PageSize).ToList();
+                        return objAPIResult;
                     }
                 }
                 else
                 {
-                    string keyCache = "CACHE_CRAWLDATACODEMAZE";
-                    var result = await this.CrawlDataCodeMaze();
-                    int intTotalCount = result.ResultObject.Count();
-                    if (result.IsError)
+                    APIResult<List<DrawlsItem>> objAPIResult = await this.CrawlDataCodeMaze();
+                    int intTotalCount = objAPIResult.ResultObject.Count();
+                    if (objAPIResult.IsError)
                     {
                         return new APIResult<List<DrawlsItem>>
                         {
@@ -227,18 +202,12 @@ namespace BLL.BLL_Drawls
                         };
                     }
 
-                    string cachedDataString = JsonSerializer.Serialize(result.ResultObject);
-                    var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
-                    DistributedCacheEntryOptions options = new DistributedCacheEntryOptions()
-                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(3));
-
                     // Add the data into the cache
-                    await Cache.Instance.Set(keyCache, dataToCache, DateTimeOffset.Now.AddHours(1));
+                    Cache.Instance.Set(KeysCache.CACHE_CRAWLDATACODEMAZE, objAPIResult.ResultObject, DateTimeOffset.Now.AddHours(1));
 
                     if (paging.PageSize == -1)
                     {
-                        result.ResultObject = result.ResultObject.Select(x =>
+                        objAPIResult.ResultObject = objAPIResult.ResultObject.Select(x =>
                         {
                             x.Paging = new PagingItem
                             {
@@ -248,11 +217,11 @@ namespace BLL.BLL_Drawls
                             };
                             return x;
                         }).ToList();
-                        return result;
+                        return objAPIResult;
                     }
 
-                    result.ResultObject = result.ResultObject.Skip((paging.PageIndex - 1) * paging.PageSize).Take(paging.PageSize).ToList();
-                    result.ResultObject = result.ResultObject.Select(x =>
+                    objAPIResult.ResultObject = objAPIResult.ResultObject.Skip((paging.PageIndex - 1) * paging.PageSize).Take(paging.PageSize).ToList();
+                    objAPIResult.ResultObject = objAPIResult.ResultObject.Select(x =>
                     {
                         x.Paging = new PagingItem
                         {
@@ -262,7 +231,8 @@ namespace BLL.BLL_Drawls
                         };
                         return x;
                     }).ToList();
-                    return result;
+
+                    return objAPIResult;
                 }
             }
             catch (Exception ex)

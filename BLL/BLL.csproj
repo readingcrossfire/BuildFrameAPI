@@ -16,6 +16,7 @@
     <ProjectReference Include="..\CACHE\CACHE.csproj" />
     <ProjectReference Include="..\CONNECT\CONNECTION.csproj" />
     <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\ENTITYFRAMEWORK\ENTITYFRAMEWORK.csproj" />
     <ProjectReference Include="..\FIREBASE\FIREBASE.csproj" />
     <ProjectReference Include="..\ML\ML.csproj" />
   </ItemGroup>

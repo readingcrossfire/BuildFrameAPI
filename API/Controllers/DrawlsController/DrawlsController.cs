@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using BLL.BLL_Drawls;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ML.APIResult;
 using ML.Drawls;
@@ -8,6 +9,7 @@ using SHARED.Atrributes;
 
 namespace API.Controllers.DrawlsController
 {
+    [Route("Drawls")]
     public partial class DrawlsController : ControllerBase
     {
         private readonly IDrawlsService _drawlsService;
@@ -17,8 +19,9 @@ namespace API.Controllers.DrawlsController
             this._drawlsService = drawlsService;
         }
 
-        [HttpPost]
         [Route("CrawlDataCodeMaze")]
+        [HttpPost]
+        [Authorize]
         [LogAttribute(WebAPIControllerName = "DrawlsController", WebAPIMethodName = "CrawlDataCodeMaze", WebAPIMethodDescription = "Lấy danh sách CODEMAZE")]
         public async Task<IActionResult> CrawlDataCodeMaze([FromBody] Paging paging, [FromQuery] bool useCache = false)
         {

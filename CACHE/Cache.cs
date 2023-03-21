@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using System.Text.Json;
-using Microsoft.Extensions.Configuration;
 using ML.APIResult;
 using SHARED.LoadConfig;
 using StackExchange.Redis;
@@ -33,13 +32,13 @@ namespace CACHE
         {
             try
             {
-                if (this._connectionMultiplexer == null ||  !this._connectionMultiplexer.IsConnected)
+                if (this._connectionMultiplexer == null || !this._connectionMultiplexer.IsConnected)
                 {
                     await this.Init();
                 }
 
-                string strCachedDataString = JsonSerializer.Serialize(objValue);
-                byte[] arrDataToCache = Encoding.UTF8.GetBytes(strCachedDataString);
+                string strDataCache = JsonSerializer.Serialize(objValue);
+                byte[] arrDataToCache = Encoding.UTF8.GetBytes(strDataCache);
                 // Add the data into the cache
                 bool setResult = await this._dataBase.StringSetAsync(strKey, arrDataToCache, dtoExpired.TimeOfDay);
                 if (setResult)
@@ -66,11 +65,11 @@ namespace CACHE
             }
         }
 
-        public async Task<MessageResultBase> Get<T>(string strKey)
+        public async Task<MessageResult<T>> Get<T>(string strKey)
         {
             try
             {
-                if (this._connectionMultiplexer == null || !this._connectionMultiplexer.IsConnected) 
+                if (this._connectionMultiplexer == null || !this._connectionMultiplexer.IsConnected)
                 {
                     await this.Init();
                 }
@@ -78,22 +77,23 @@ namespace CACHE
                 RedisValue valueResult = await this._dataBase.StringGetAsync(strKey);
                 if (!valueResult.IsNullOrEmpty)
                 {
-                    object resultParse = Convert.ChangeType(valueResult, typeof(T));
-                    return await Task.FromResult(new MessageResult<T>
+                    string strDataCache = Encoding.UTF8.GetString(valueResult);
+                    T objDataCache = JsonSerializer.Deserialize<T>(strDataCache);
+                    return new MessageResult<T>
                     {
                         IsError = false,
                         Message = "Lấy thành công",
-                        ResultObject = (T)resultParse
-                    });
+                        ResultObject = objDataCache
+                    };
                 }
                 else
                 {
-                    return await Task.FromResult(new MessageResult<T>
+                    return new MessageResult<T>
                     {
-                        IsError = true,
-                        Message = "Có lỗi xảy ra, lấy dữ liệu cache thất bại",
+                        IsError = false,
+                        Message = "Không có dữ liệu",
                         ResultObject = default(T)
-                    });
+                    };
                 }
             }
             catch (Exception objEx)
@@ -106,7 +106,5 @@ namespace CACHE
                 });
             }
         }
-
-        
     }
 }

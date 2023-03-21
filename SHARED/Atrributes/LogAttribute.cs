@@ -43,8 +43,8 @@ namespace SHARED.Atrributes
             dapperConnection.AddParameter("@METHODNAME", this.WebAPIMethodName ?? "");
             dapperConnection.AddParameter("@PARAMS", strJsonParams ?? "");
             dapperConnection.AddParameter("@DESCRIPTION", this.WebAPIMethodDescription ?? "");
-           
-            int result = dapperConnection.ExecuteAsync().Result;
+
+            int result = await dapperConnection.ExecuteAsync();
             await next();
         }
     }

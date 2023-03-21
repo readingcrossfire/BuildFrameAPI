@@ -2,6 +2,6 @@
 {
     public class APIResult<T>: APIResultBase
     {
-        public T ResultObject { get; set; }
+        public T? ResultObject { get; set; }
     }
 }

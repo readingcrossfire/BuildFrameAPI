@@ -1,35 +1,24 @@
-﻿using System.Text;
-using System.Text.Json;
+﻿using CACHE;
 using DAL.DAL_MenuTypes;
-using Microsoft.Extensions.Caching.Distributed;
 using ML.APIResult;
 using ML.MenuTypes;
 
 namespace BLL.BLL_MenuTypes
 {
-    public partial class BLL_MenuTypes : IMenuTypesService
+    public class BLL_MenuTypes : IMenuTypesService
     {
-        protected readonly IDistributedCache _cache;
-        protected readonly DAL_MenuTypes _dal_MenuTypes;
-        public BLL_MenuTypes(IDistributedCache cache, DAL_MenuTypes dal_MenuTypes)
-        {
-            this._cache = cache;
-            this._dal_MenuTypes = dal_MenuTypes;
-        }
-
         public async Task<APIResult<List<MenuTypesItem>>> GetAll(bool useCache = false)
         {
             try
             {
+                DAL_MenuTypes objDAL_MenuTypes = new DAL_MenuTypes();
+
                 if (useCache)
                 {
-                    CancellationTokenSource cancel = new CancellationTokenSource();
-                    string keyCache = "CACHE_MENUTYPES_GETALL";
-                    byte[] cachedData = await this._cache.GetAsync(keyCache, cancel.Token);
-                    if (cachedData != null)
+                    MessageResult<List<MenuTypesItem>> lstDataCache = await Cache.Instance.Get<List<MenuTypesItem>>(KeysCache.CACHE_MENUTYPES_GETALL);
+                    if (lstDataCache != null && !lstDataCache.IsError && lstDataCache.ResultObject != null && lstDataCache.ResultObject.Count > 0)
                     {
-                        var cachedDataString = Encoding.UTF8.GetString(cachedData);
-                        List<MenuTypesItem> lstMenuTypes = JsonSerializer.Deserialize<List<MenuTypesItem>>(cachedDataString) ?? new();
+                        List<MenuTypesItem> lstMenuTypes = lstDataCache.ResultObject;
                         return new APIResult<List<MenuTypesItem>>
                         {
                             IsError = false,
@@ -39,23 +28,8 @@ namespace BLL.BLL_MenuTypes
                     }
                     else
                     {
-                        if (cancel.IsCancellationRequested)
-                        {
-                            return new APIResult<List<MenuTypesItem>>
-                            {
-                                IsError = true,
-                                Message = "Có lỗi xảy ra"
-                            };
-                        }
-                        List<MenuTypesItem> lstMenuTypes = await this._dal_MenuTypes.MenuTypesGetAll() as List<MenuTypesItem>;
-                        string cachedDataString = JsonSerializer.Serialize(lstMenuTypes);
-                        var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
-                        var options = new DistributedCacheEntryOptions()
-                        .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
-                        .SetSlidingExpiration(TimeSpan.FromMinutes(3));
-
-                        // Add the data into the cache
-                        await _cache.SetAsync(keyCache, dataToCache, options);
+                        List<MenuTypesItem> lstMenuTypes = await objDAL_MenuTypes.MenuTypesGetAll() as List<MenuTypesItem> ?? new List<MenuTypesItem>();
+                        await Cache.Instance.Set(KeysCache.CACHE_MENUTYPES_GETALL, lstMenuTypes, DateTimeOffset.Now.AddHours(2));
                         return new APIResult<List<MenuTypesItem>>
                         {
                             IsError = false,
@@ -66,16 +40,8 @@ namespace BLL.BLL_MenuTypes
                 }
                 else
                 {
-                    string keyCache = "CACHE_MENUTYPES_GETALL";
-                    List<MenuTypesItem> lstMenuType = await this._dal_MenuTypes.MenuTypesGetAll() as List<MenuTypesItem>;
-                    string cachedDataString = JsonSerializer.Serialize(lstMenuType);
-                    var dataToCache = Encoding.UTF8.GetBytes(cachedDataString);
-                    var options = new DistributedCacheEntryOptions()
-                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(5))
-                    .SetSlidingExpiration(TimeSpan.FromMinutes(3));
-
-                    // Add the data into the cache
-                    await _cache.SetAsync(keyCache, dataToCache, options);
+                    List<MenuTypesItem> lstMenuType = await objDAL_MenuTypes.MenuTypesGetAll() as List<MenuTypesItem> ?? new List<MenuTypesItem>();
+                    Cache.Instance.Set(KeysCache.CACHE_MENUTYPES_GETALL, lstMenuType, DateTimeOffset.Now.AddHours(2));
                     return new APIResult<List<MenuTypesItem>>
                     {
                         IsError = false,
